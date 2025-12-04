@@ -221,7 +221,7 @@ def rinexobs(
             meas=meas,
             verbose=verbose,
             fast=fast,
-            interval=interval,
+            # interval=interval,
         )
     elif int(info["version"]) == 3:
         obs = rinexobs3(
@@ -232,11 +232,13 @@ def rinexobs(
             meas=meas,
             verbose=verbose,
             fast=fast,
-            interval=interval,
+            # interval=interval,
         )
     else:
         raise ValueError(f"unknown RINEX {info}  {fn}")
-
+    if interval is not None:
+        obs = obs.resample(time=f"{int(interval)}S").median()
+        obs.attrs["interval"] = int(interval)
     # %% optional output write
     if outfn:
         outfn = Path(outfn).expanduser()
