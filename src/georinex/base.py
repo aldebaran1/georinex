@@ -236,7 +236,7 @@ def rinexobs(
         )
     else:
         raise ValueError(f"unknown RINEX {info}  {fn}")
-    if interval is not None:
+    if (interval is not None) and obs.time.size > 0:
         obs = obs.resample(time=f"{int(interval)}S").median()
         obs.attrs["interval"] = int(interval)
     # %% optional output write
